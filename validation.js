@@ -15,7 +15,7 @@ export const field = (validator) => {
 		set(validity);
 	};
 
-	const enable_message = () => {
+	const validate = () => {
 		message_enabled = true;
 		update();
 	};
@@ -24,8 +24,7 @@ export const field = (validator) => {
 		node = new_node;
 		value = new_value;
 		update();
-
-		node.addEventListener('blur', enable_message, true);
+		node.addEventListener('blur', validate, true);
 
 		return {
 			update(new_value) {
@@ -33,16 +32,14 @@ export const field = (validator) => {
 				update();
 			},
 			destroy() {
-				node.removeEventListener('blur', enable_message);
+				node.removeEventListener('blur', validate);
 				node = null;
-				message_enabled = false;
 				update();
 			},
 		};
-
 	};
 
-	action.validate = () => node && enable_message();
+	action.validate = validate;
 
 	action.subscribe = subscribe;
 
