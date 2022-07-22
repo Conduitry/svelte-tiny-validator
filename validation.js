@@ -25,7 +25,13 @@ export const field = (validator, chill) => {
 		node = new_node;
 		value = new_value;
 		update();
-		node.addEventListener('blur', validate, true);
+
+		const on_blur = (event) => {
+			if (!node.contains(event.relatedTarget)) {
+				validate();
+			}
+		};
+		node.addEventListener('blur', on_blur, true);
 
 		return {
 			update(new_value) {
@@ -33,7 +39,7 @@ export const field = (validator, chill) => {
 				update();
 			},
 			destroy() {
-				node.removeEventListener('blur', validate);
+				node.removeEventListener('blur', on_blur);
 				node = null;
 				update();
 			},
