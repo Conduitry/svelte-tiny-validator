@@ -25,7 +25,7 @@ export const field = (validator) => {
 		value = new_value;
 		update();
 
-		node.addEventListener('blur', enable_message);
+		node.addEventListener('blur', enable_message, true);
 
 		return {
 			update(new_value) {
