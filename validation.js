@@ -4,16 +4,14 @@ export const field = (validator) => {
 	let node = null;
 	let value;
 	let message_enabled = false;
-	const validity = { valid: true, message: null };
-
-	const { set, subscribe } = writable(validity);
+	const { set, subscribe } = writable();
 
 	const update = () => {
 		const message = node && validator(value);
-		validity.valid = !message;
-		validity.message = message_enabled ? message : null;
-		set(validity);
+		set({ valid: !message, message: message_enabled ? message : null });
 	};
+
+	update();
 
 	const validate = () => {
 		message_enabled = true;
