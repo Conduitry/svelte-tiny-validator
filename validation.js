@@ -1,6 +1,6 @@
 import { get, writable } from 'svelte/store';
 
-export const field = (validator) => {
+export const field = (validator, chill) => {
 	let node = null;
 	let value;
 	let message_enabled = false;
@@ -8,6 +8,9 @@ export const field = (validator) => {
 
 	const update = () => {
 		const message = node && validator(value);
+		if (chill && !message) {
+			message_enabled = false;
+		}
 		set({ valid: !message, message: message_enabled ? message : null });
 	};
 
