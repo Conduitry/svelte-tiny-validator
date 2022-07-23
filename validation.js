@@ -1,13 +1,12 @@
 import { writable } from 'svelte/store';
 
 export const field = (validator, chill) => {
-	let count = 0;
 	let value;
 	let message_enabled = false;
 	const { set, subscribe } = writable();
 
 	const update = () => {
-		const message = count ? validator(value) : null;
+		const message = validator(value);
 		const valid = !message;
 		if (chill && valid) {
 			message_enabled = false;
@@ -16,36 +15,24 @@ export const field = (validator, chill) => {
 		return valid;
 	};
 
-	update();
-
 	const validate = () => {
 		message_enabled = true;
 		return update();
 	};
 
-	const action = (node, new_value) => {
-		count++;
-		value = new_value;
-		update();
-
+	const action = (node) => {
 		const on_blur = (event) => {
 			if (!node.contains(event.relatedTarget)) {
 				validate();
 			}
 		};
 		node.addEventListener('blur', on_blur, true);
+		return { destroy: () => node.removeEventListener('blur', on_blur) };
+	};
 
-		return {
-			update(new_value) {
-				value = new_value;
-				update();
-			},
-			destroy() {
-				count--;
-				node.removeEventListener('blur', on_blur);
-				update();
-			},
-		};
+	action.set = (new_value) => {
+		value = new_value;
+		update();
 	};
 
 	action.validate = validate;
