@@ -42,4 +42,4 @@ export const field = (validator, chill) => {
 	return action;
 };
 
-export const validate = (...fields) => fields.reduce((valid, field) => field.validate() && valid, true);
+export const validate = (...fields) => fields.reduce((valid, field) => (!field || field.validate()) && valid, true);
