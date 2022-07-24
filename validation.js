@@ -21,8 +21,8 @@ export const field = (validator, chill) => {
 	};
 
 	const action = (node) => {
-		const on_blur = (event) => {
-			if (!node.contains(event.relatedTarget)) {
+		const on_blur = async (event) => {
+			if (!node.contains(event.relatedTarget || await new Promise((res) => setTimeout(() => res(document.activeElement), 100)))) {
 				validate();
 			}
 		};
