@@ -42,4 +42,4 @@ export const field = (validator, chill) => {
 
 export const validate = (...fields) => fields.reduce((valid, field) => (!field || field.validate()) && valid, true);
 
-export const reset = (...fields) => fields.forEach(field => field.validate(false));
+export const reset = (...fields) => fields.forEach(field => field && field.validate(false));
