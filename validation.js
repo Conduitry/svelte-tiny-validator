@@ -30,14 +30,16 @@ export const field = (validator, chill) => {
 		return { destroy: () => node.removeEventListener('blur', on_blur) };
 	};
 
+	action.reset = () => {
+		message_enabled = false;
+		update();
+	};
 	action.set = (new_value) => {
 		value = new_value;
 		update();
 	};
-
-	action.validate = validate;
-
 	action.subscribe = subscribe;
+	action.validate = validate;
 
 	return action;
 };
