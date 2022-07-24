@@ -15,8 +15,8 @@ export const field = (validator, chill) => {
 		return valid;
 	};
 
-	const validate = () => {
-		message_enabled = true;
+	const validate = (display = true) => {
+		message_enabled = display;
 		return update();
 	};
 
@@ -30,10 +30,6 @@ export const field = (validator, chill) => {
 		return { destroy: () => node.removeEventListener('blur', on_blur) };
 	};
 
-	action.reset = () => {
-		message_enabled = false;
-		update();
-	};
 	action.set = (new_value) => {
 		value = new_value;
 		update();
