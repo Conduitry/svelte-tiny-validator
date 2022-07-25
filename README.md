@@ -32,10 +32,10 @@ The most important export from this library is the `field` function.
 ```js
 import { field } from '@conduitry/svelte-tiny-validation';
 
-const foo_field = field(false);
+const foo_field = field();
 ```
 
-The argument to `field` is a boolean indicating whether to use default or chill mode. `false` is default, and `true` is chill.
+The optional argument to `field` is a boolean indicating whether to use default or chill mode. `false` is default, and `true` is chill.
 
 The object that this function returns can be interacted with in four different ways. These are:
 
@@ -48,7 +48,7 @@ This update would usually happen through a reactive declaration (`$:`) whenever 
 
 ```js
 let foo_value;
-const foo_field = field(false);
+const foo_field = field();
 $: $foo_field = is_good(foo_value) ? null : 'This is bad.';
 ```
 
@@ -91,7 +91,7 @@ This can be used for conceptual regions on the form, which should not validate u
 <script>
 	let foo_value = false;
 	let bar_value = false;
-	const foo_bar_field = field(false);
+	const foo_bar_field = field();
 	$: $foo_bar_field = is_good(foo_value, bar_value) ? null : 'This is bad.';
 </script>
 
@@ -109,7 +109,7 @@ This can be used for conceptual regions on the form, which should not validate u
 If you need to manually trigger validation on a field, you can call its `.validate()` method. This will cause the current validation message (if any) to become active, even if the field has never been touched. It also returns a boolean indicating whether the field passes validation.
 
 ```js
-const foo_field = field(false);
+const foo_field = field();
 
 // ...
 
