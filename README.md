@@ -52,6 +52,14 @@ const foo_field = field();
 $: $foo_field = is_good(foo_value) ? null : 'This is bad.';
 ```
 
+Using a writable store like this is helpful because it ensures that if you have another reactive block that reads from the store, the write will happen before the read, and you will have the most up-to-date field validation information. However, the value that you write will not be the same as the value that you read (see below), and if this is too magical, you can use the `.set()` method on the field object instead, which is what writing to the store compiles to.
+
+```js
+let foo_value;
+const foo_field = field();
+$: foo_field.set(is_good(foo_value) ? null : 'This is bad.');
+```
+
 #### 2. A store you can read the validation information from
 
 Each field instance is also a readable store, whose value is a `{ valid, message }` object.
