@@ -1,17 +1,16 @@
 import { writable } from 'svelte/store';
 
-export const field = (validator, chill) => {
-	let value;
+export const field = (chill) => {
+	let current_message;
 	let message_enabled = false;
 	const { set, subscribe } = writable();
 
 	const update = () => {
-		const message = validator(value);
-		const valid = !message;
+		const valid = !current_message;
 		if (chill && valid) {
 			message_enabled = false;
 		}
-		set({ valid, message: message_enabled ? message : null });
+		set({ valid, message: message_enabled ? current_message : null });
 		return valid;
 	};
 
@@ -30,8 +29,8 @@ export const field = (validator, chill) => {
 		return { destroy: () => node.removeEventListener('blur', on_blur) };
 	};
 
-	action.set = (new_value) => {
-		value = new_value;
+	action.set = (message) => {
+		current_message = message;
 		update();
 	};
 	action.subscribe = subscribe;

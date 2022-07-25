@@ -4,7 +4,7 @@ A tiny unframework for form validation in Svelte.
 
 ## Overview
 
-This is a tiny form validation library that assumes you are okay with writing your own functions that accept input and return the validation error for that field. It also makes a couple other (hopefully reasonable) assumptions about how you want your form to work:
+This is a tiny form validation library that assumes you are okay with writing your own code to check the validity of field values. It also makes a couple other (hopefully reasonable) assumptions about how you want your form to work:
 
 - Fields should not display validation errors until you first leave the field, or until you try to submit the form.
 - Validation errors should disappear the moment you fix them, not when you next leave the field.
@@ -25,36 +25,40 @@ Using the same example as above, imagine that you've returned to a required fiel
 
 ## Usage
 
-### `field(validator, chill)`
+### `field(chill)`
 
 The most important export from this library is the `field` function.
 
 ```js
 import { field } from '@conduitry/svelte-tiny-validation';
 
-const foo_field = field((value) => { /* ... */ }, false);
+const foo_field = field(false);
 ```
 
-The first argument to `field` is your `validator` function. This will be passed the field value (see below) and should (synchronously) return a falsy value if the field value is acceptable, or should return an arbitrary truthy validation error if it is not. The library doesn't care what sort of value this is, and it will just be returned as-is to your code when the message should be displayed. It will commonly be a string, or perhaps an array of strings.
-
-The second argument to `field` is a boolean indicating whether to use default or chill mode. `false` is default, and `true` is chill.
+The argument to `field` is a boolean indicating whether to use default or chill mode. `false` is default, and `true` is chill.
 
 The object that this function returns can be interacted with in four different ways. These are:
 
-#### 1. A store you can write field values to be validated to
+#### 1. A store you can write field validation messages to
 
-Whenever appropriate, you should write the value to be validated to the store. This would usually happen through a reactive declaration (`$:`) whenever the variable holding the value of the field changes.
+Whenever appropriate, you should write the validation message to the store. If the field contains a valid value, write a falsy value to the store. If the field contains an invalid value, write an arbitrary truthy validation error. The library doesn't care what sort of value this is, and it will just be returned as-is to your code when the message should be displayed. It will commonly be a string, or perhaps an array of strings.
+
+This update would usually happen through a reactive declaration (`$:`) whenever the value of the field changes.
 
 
 ```js
 let foo_value;
-const foo_field = field((value) => { /* ... */ }, false);
-$: $foo_field = foo_value;
+const foo_field = field(false);
+$: $foo_field = is_good(foo_value) ? null : 'This is bad.';
 ```
 
 #### 2. A store you can read the validation information from
 
-Each field instance is also a readable store, whose value is a `{ valid, message }` object. `valid` is a boolean indicating whether the current field value is valid, regardless of whether its validation message should now be showing. (That is, it will be true if your validator returned a falsy value, and it will be false if it returned a truthy value.) `message` is the error returned by your validator function if the field should now be showing its validation messages, and is `null` otherwise.
+Each field instance is also a readable store, whose value is a `{ valid, message }` object.
+
+`valid` is a boolean indicating whether the current field value is valid, regardless of whether its validation message should now be showing. (That is, it will be true if you set the store to a falsy value, and it will be false if you set it to a truthy value.)
+
+`message` is the specific message you previously set if the field should now be showing its validation messages, and is `null` otherwise.
 
 ```js
 if ($foo_field.valid) {
@@ -87,8 +91,8 @@ This can be used for conceptual regions on the form, which should not validate u
 <script>
 	let foo_value = false;
 	let bar_value = false;
-	const foo_bar_field = field(([foo_value, bar_value]) => { /* ... */ }, false);
-	$: $foo_bar_field = [foo_value, bar_value];
+	const foo_bar_field = field(false);
+	$: $foo_bar_field = is_good(foo_value, bar_value) ? null : 'This is bad.';
 </script>
 
 <div use:foo_bar_field>
@@ -102,10 +106,10 @@ This can be used for conceptual regions on the form, which should not validate u
 
 #### 4. An object with a `.validate()` method to manually trigger validation
 
-If you need to manually trigger validation on a field, you can call its `.validate()` method. This will cause the current validation message (if any) to become active, even if the field has never been touched. It also returns a boolean indicating whether the field value passes validation.
+If you need to manually trigger validation on a field, you can call its `.validate()` method. This will cause the current validation message (if any) to become active, even if the field has never been touched. It also returns a boolean indicating whether the field passes validation.
 
 ```js
-const foo_field = field((value) => { /* ... */ }, false);
+const foo_field = field(false);
 
 // ...
 
