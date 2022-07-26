@@ -6,21 +6,19 @@ export const validator = (chill) => {
 	let current_message;
 	// a boolean: whether we should currently display any validation messages for this validator
 	let message_enabled = false;
-	// the { valid, message } store we expose
+	// the validation message store we expose
 	const { set, subscribe } = writable();
 
 	// update the exposed store value, as appropriate
 	const update = () => {
-		// the value is valid when the validation message is falsy
-		const valid = !current_message;
-		if (chill && valid) {
+		if (chill && !current_message) {
 			// in chill mode, the value becoming valid means we should hide validation messages until something causes them to be shown again
 			message_enabled = false;
 		}
-		// set the validity (always) and the message (if enabled)
-		set({ valid, message: message_enabled ? current_message : null });
+		// set the message if enabled
+		set(message_enabled ? current_message : null);
 		// return the validity, so that .validate() can return it
-		return valid;
+		return !current_message;
 	};
 
 	// force enable (or disable) validation messages on this validator and returns its current validity

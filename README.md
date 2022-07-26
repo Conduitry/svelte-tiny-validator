@@ -51,7 +51,7 @@ const foo_v = validator();
 $: $foo_v = is_good(foo) ? null : 'This is bad.';
 ```
 
-Using a writable store like this is helpful because it ensures that if you have another reactive block that reads from the store, the write will happen before the read, and you will have the most up-to-date validation information. However, the value that you write will not be the same as the value that you read (see below), and if this is too magical, you can use the `.set()` method on the validator object instead, which is what writing to the store compiles to.
+Using a writable store like this is helpful because it ensures that if you have another reactive block that reads from the store, the write will happen before the read, and you will have the most up-to-date validation information. However, the value that you write will not necessarily be the same as the value that you read (see below), and if this is too magical, you can use the `.set()` method on the validator object instead, which is what writing to the store compiles to.
 
 ```js
 let foo;
@@ -59,23 +59,13 @@ const foo_v = validator();
 $: foo_v.set(is_good(foo) ? null : 'This is bad.');
 ```
 
-#### 2. A store you can read the validation information from
+#### 2. A store you can read the validation message from
 
-Each validator instance is also a readable store, whose value is a `{ valid, message }` object.
-
-`valid` is a boolean indicating whether the current value is valid, regardless of whether its validation message should now be showing. (That is, it will be true if you set the store to a falsy value, and it will be false if you set it to a truthy value.)
-
-`message` is the specific message you previously set if the validator should now be showing its validation messages, and is `null` otherwise.
-
-```js
-if ($foo_v.valid) {
-	// ...
-}
-```
+Each validator instance is also a readable store, whose value is the previously set validation message if the validator should now be showing the message. The store's value is `null` if the validator should not yet be displaying its validation message.
 
 ```svelte
-{#if $foo_v.message}
-	<div class='error'>{$foo_v.message}</div>
+{#if $foo_v}
+	<div class='error'>{$foo_v}</div>
 {/if}
 ```
 
@@ -85,8 +75,8 @@ Use this to connect validator objects with DOM elements that should trigger the 
 
 ```svelte
 <input type='text' bind:value={foo} use:foo_v>
-{#if $foo_v.message}
-	<div class='error'>{$foo_v.message}</div>
+{#if $foo_v}
+	<div class='error'>{$foo_v}</div>
 {/if}
 ```
 
@@ -105,8 +95,8 @@ This can be used for conceptual regions on the form, which should not validate u
 <div use:foo_bar_v>
 	<input type='checkbox' bind:checked={foo}>
 	<input type='checkbox' bind:checked={bar}>
-	{#if $foo_bar_v.message}
-		<div class='error'>{$foo_bar_v.message}</div>
+	{#if $foo_bar_v}
+		<div class='error'>{$foo_bar_v}</div>
 	{/if}
 </div>
 ```
