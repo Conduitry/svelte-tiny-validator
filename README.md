@@ -1,4 +1,4 @@
-# svelte-tiny-validation
+# svelte-tiny-validator
 
 A tiny unframework for form validation in Svelte.
 
@@ -30,7 +30,7 @@ Using the same example as above, imagine that you've returned to a required fiel
 The most important export from this library is the `field` function.
 
 ```js
-import { field } from '@conduitry/svelte-tiny-validation';
+import { field } from '@conduitry/svelte-tiny-validator';
 
 const foo_field = field();
 ```
@@ -139,7 +139,7 @@ You will often be validating or resetting multiple fields at once, in which case
 ## `validate(...fields)`
 
 ```js
-import { validate } from '@conduitry/svelte-tiny-validation';
+import { validate } from '@conduitry/svelte-tiny-validator';
 
 // ...
 
@@ -163,7 +163,7 @@ if (validate(foo_field, should_validate_bar_field && bar_field, baz_field)) {
 ## `reset(...fields)`
 
 ```js
-import { reset } from '@conduitry/svelte-tiny-validation';
+import { reset } from '@conduitry/svelte-tiny-validator';
 
 // ...
 

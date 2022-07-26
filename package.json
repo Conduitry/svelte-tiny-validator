@@ -1,11 +1,11 @@
 {
-	"name": "@conduitry/svelte-tiny-validation",
+	"name": "@conduitry/svelte-tiny-validator",
 	"version": "0.0.0",
 	"description": "A tiny unframework for form validation in Svelte.",
 	"private": true,
-	"homepage": "https://git.chor.date/Conduitry/svelte-tiny-validation",
+	"homepage": "https://git.chor.date/Conduitry/svelte-tiny-validator",
 	"type": "module",
 	"exports": {
-		".": "./validation.js"
+		".": "./validator.js"
 	}
 }
