@@ -152,6 +152,14 @@ This calls `.validate()` on each of the fields, and returns `true` if all of the
 
 Note that this will call `.validate()` on all fields that are passed, and will not stop on the first one that fails validation. This is usually what you want when the user tries to submit a form.
 
+Any field arguments that are falsy will be skipped and will not affect the result. This lets you write code like:
+
+```js
+if (validate(foo_field, should_validate_bar_field && bar_field, baz_field)) {
+	// ...
+}
+```
+
 ## `reset(...fields)`
 
 ```js
@@ -163,6 +171,8 @@ reset(foo_field, bar_field);
 ```
 
 This calls `.validate(false)` on each of the fields. This does not reset the _values_ of any of fields; it just marks them all as no longer showing their validation errors. Typically, this would be called at the same time as resetting all of the fields values.
+
+Here, too, any field arguments that are falsy will be skipped.
 
 ## License
 
