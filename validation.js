@@ -21,7 +21,7 @@ export const field = (chill) => {
 
 	const action = (node) => {
 		const on_blur = async (event) => {
-			if (!message_enabled && !node.contains(event.relatedTarget || await new Promise((res) => setTimeout(() => res(document.activeElement), 100)))) {
+			if (!message_enabled && !node.contains(event.relatedTarget || (await new Promise((res) => setTimeout(() => res(document.activeElement), 100))))) {
 				validate();
 			}
 		};
@@ -41,4 +41,4 @@ export const field = (chill) => {
 
 export const validate = (...fields) => fields.reduce((valid, field) => (!field || field.validate()) && valid, true);
 
-export const reset = (...fields) => fields.forEach(field => field && field.validate(false));
+export const reset = (...fields) => fields.forEach((field) => field && field.validate(false));
