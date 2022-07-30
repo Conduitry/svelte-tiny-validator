@@ -17,15 +17,14 @@ export const validator = (chill) => {
 		}
 		// set the message if enabled
 		set(message_enabled ? current_message : null);
-		// return the validity, so that .validate() can return it
-		return !current_message;
 	};
 
 	// force enable (or disable) validation messages on this validator and returns its current validity
 	const validate = (display = true) => {
 		message_enabled = display;
-		// update the value of the store, returning the validity
-		return update();
+		update();
+		// return the validity
+		return !current_message;
 	};
 
 	// we want to be able to use the validator object as an action, which is a function
@@ -49,10 +48,9 @@ export const validator = (chill) => {
 	// set the validation message and update the store value
 	action.set = (message) => {
 		current_message = message;
-		// update the value of the store, as appropriate
 		update();
 	};
-	// copy over subscribe method from the underlying store
+	// copy over the .subscribe() method from the underlying store
 	action.subscribe = subscribe;
 	// create the .validate() method on the validator object
 	action.validate = validate;
