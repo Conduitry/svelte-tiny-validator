@@ -5,7 +5,15 @@
 	"private": true,
 	"homepage": "https://git.chor.date/Conduitry/svelte-tiny-validator",
 	"type": "module",
+	"types": "./validator.d.ts",
+	"main": "./validator.js",
 	"exports": {
-		".": "./validator.js"
+		".": {
+			"types": "./validator.d.ts",
+			"import": "./validator.js"
+		}
+	},
+	"peerDependencies": {
+		"svelte": "^3.46.6"
 	}
 }
