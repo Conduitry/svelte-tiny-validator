@@ -3,10 +3,7 @@ import { Writable } from 'svelte/store';
 
 type Falsy = false | 0 | '' | null | undefined;
 
-type Validator<T> = Action &
-	Writable<T | Falsy> & {
-		validate: (display?: boolean) => boolean;
-	};
+type Validator<T> = Action<HTMLElement, undefined> & Writable<T | Falsy> & { validate: (display?: boolean) => boolean };
 
 export function validator<T = string>(chill?: boolean): Validator<T>;
 
