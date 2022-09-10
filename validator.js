@@ -2,11 +2,11 @@ import { writable } from 'svelte/store';
 
 // create a validator object
 export const validator = (chill) => {
-	// the current validator message for the validator, regardless of whether it should be presented to the user
+	// the current validation message for the validator, regardless of whether it should be presented to the user
 	let current_message;
-	// a boolean: whether we should currently display any validation messages for this validator
+	// whether we should currently display validation messages for this validator
 	let message_enabled = false;
-	// the validation message store we expose
+	// the underlying validation message store
 	const { set, subscribe } = writable();
 
 	// update the exposed store value, as appropriate
@@ -28,7 +28,7 @@ export const validator = (chill) => {
 	};
 
 	// we want to be able to use the validator object as an action, which is a function
-	// so we first create the function, then assign methods onto it
+	// so we first create the function, and then assign methods onto it
 	const action = (node) => {
 		// trigger validation whenever focus goes from inside our node to outside our node
 		const on_blur = async (event) => {
