@@ -27,12 +27,13 @@ Using the same example as above, imagine that you've returned to a required fiel
 
 ### `validator(chill)`
 
-The most important export from this library is the `validator` function.
+The most important export from this library is the `validator` function, which returns a new validator object.
 
 ```js
 import { validator } from '@conduitry/svelte-tiny-validator';
 
 const foo_v = validator();
+const bar_v = validator(true);
 ```
 
 The optional argument to `validator` is a boolean indicating whether to use default or chill mode. `false` is default, and `true` is chill.
@@ -125,7 +126,7 @@ Note that this will not change the value of `$foo_v.valid`.
 
 You will often be validating or resetting multiple validators at once, in which case the `validate()` and `reset()` helper functions below will be useful.
 
-## `validate(...validator)`
+## `validate(...validators)`
 
 ```js
 import { validate } from '@conduitry/svelte-tiny-validator';
@@ -137,7 +138,7 @@ if (validate(foo_v, bar_v)) {
 }
 ```
 
-This calls `.validate()` on each of the validators, and returns `true` if all of them returned `true`. Typically, this would be called when the user attempts to submit the form, checking whether the entire form is valid, and displaying any validation errors if not.
+This calls `.validate()` on each of the validators, and returns `true` if all of them returned `true`. Typically, this would be called when the user attempts to submit the form, checking whether the entire form is valid, and displaying any validation errors if not. If you are re-rendering an invalid form that was able to be submitted because the user did not have JavaScript running, you should also call this so that the server-rendered HTML contains the appropriate validation error messages.
 
 Note that this will call `.validate()` on all validators that are passed, and will not stop on the first one that fails validation. This is usually what you want when the user tries to submit a form.
 
