@@ -31,10 +31,9 @@ export const validator = (chill) => {
 	// so we first create the function, and then assign methods onto it
 	const action = (node) => {
 		// trigger validation whenever focus goes from inside our node to outside our node
-		const on_blur = async (event) => {
+		const on_blur = (event) => {
 			// if validation messages aren't already enabled, check whether the new focused element is outside of our node
-			// if event.relatedTarget is not available, wait 100ms and then use document.activeElement
-			if (!message_enabled && !node.contains(event.relatedTarget || (await new Promise((res) => setTimeout(() => res(document.activeElement), 100))))) {
+			if (!message_enabled && !node.contains(event.relatedTarget)) {
 				// enable displaying validation messages for this validator, and update the store
 				validate();
 			}
